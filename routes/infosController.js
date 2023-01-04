@@ -3,7 +3,7 @@ const router = express.Router();
 
 const { InfosModel } = require("../models/infosModel");
 
-router.get("/", (req, res) => {
+router.get("/getInfos", (req, res) => {
   InfosModel.find((err, docs) => {
     // console.log(docs);
     if (!err) res.send(docs);
@@ -11,7 +11,7 @@ router.get("/", (req, res) => {
   });
 });
 
-router.post("/", (req, res) => {
+router.post("/infos", (req, res) => {
   const newRecord = new InfosModel({
     pseudo: req.body.pseudo,
     telephone: req.body.telephone,
