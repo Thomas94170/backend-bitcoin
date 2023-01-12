@@ -9,7 +9,7 @@ function getInfos() {
   return Infos.find({});
 }
 
-client.api.contacts;
+// client.api.contacts;
 
 getInfos().then((infos) => {
   infos.forEach((info) => {
