@@ -13,24 +13,30 @@ router.get("/getInfos", (req, res) => {
 });
 
 router.post("/infos", (req, res) => {
-  const newRecord = new InfosModel({
-    pseudo: req.body.pseudo,
-    telephone: req.body.telephone,
-  });
-
   //cryptage numéro de téléphone
   const saltRounds = 10;
 
   const phoneNumber = req.body.telephone; //ici je récup le numéro de téléphone que je rentre dans mon input
 
   bcrypt.hash(phoneNumber, saltRounds, function (err, hash) {
-    // Enregistrer le hash dans la base de données
-  });
-  //instancier avant le save afin que le num s'enregistre crypté
+    if (err) {
+      throw err; // TODO : handle error; https://expressjs.com/en/guide/error-handling.html
+    }
+    const hashedPhoneNumber = hash;
 
-  newRecord.save((err, docs) => {
-    if (!err) res.send(docs);
-    else console.log("erreur dans la création de la data " + err);
+    const newRecord = new InfosModel({
+      pseudo: req.body.pseudo,
+      telephone: hashedPhoneNumber,
+    });
+
+    newRecord.save((err, docs) => {
+      if (!err) {
+        return res.send(docs);
+      }
+
+      console.log("erreur dans la création de la data " + err);
+      throw err; // TODO handle error: https://expressjs.com/en/guide/error-handling.html
+    });
   });
 });
 
